@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<h1> <b>Ievadiet produkta informaciju</b> </h1>
+
+	<body>
+		
+		<form action="#" th:action="@{/updateProduct/__${id}__}" th:object="${product}" method="post">
+			<label>TITLE:</label>
+			<input type="text" th:field="*{title}"> <!-- tiek saglabāts teksts product.title -->
+			<label>DESCRIPTION:</label>
+			<input type="text" th:field="*{description}">
+			<label>QUANTITY:</label>
+			<input type="text" th:field="*{quantity}">
+			<label>PRICE:</label>
+			<input type="text" th:field="*{price}">
+			
+			<input type="submit" value="Save changes">
+		</form>
+
+	
+		<p>@BadMoodDuck all rights reserved</p>
+	</body>
+
+
+</html>

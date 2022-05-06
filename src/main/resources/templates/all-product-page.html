@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<h1>Informacija par produktiem</h1>
+	<body>
+	
+	<table>
+		<tr th:each="temp: ${object}">
+    		<td th:text="${temp.getId()}" />
+			<td th:text="${temp.getTitle()}" />
+			<td th:text="${temp.getDescription()}" />
+			<td th:text="${temp.getQuantity()}" />
+			<td th:text="${temp.getPrice()}" />
+		</tr>
+	</table>
+	
+	
+		
+	</body>
+
+
+
+</html>

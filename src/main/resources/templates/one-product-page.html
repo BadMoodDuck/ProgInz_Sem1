@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<h1>Informacija par produktu</h1>
+
+	<body>
+		<p>ID</p>
+		<p th:text="${object.getId()}" />
+		<p>TITLE</p>
+		<p th:text="${object.getTitle()}" />
+		<p><b>DESCRIPTION</b></p>
+		<p th:text="${object.getDescription()}" />
+		<p>QUANTITY</p>
+		<p th:text="${object.getQuantity()}" />
+		<p>PRICE</p>
+		<p th:text="${object.getPrice()}" />
+		
+		<p>@BadMoodDuck all rights reserved</p>
+	</body>
+
+
+</html>
