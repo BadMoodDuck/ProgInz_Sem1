@@ -3,6 +3,7 @@ package lv.venta.demo.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lv.venta.demo.models.Product;
+import lv.venta.demo.sevices.ProductCRUD;
 
 @Controller
 public class MyFirstController {
 	
-	private ArrayList<Product> allProducts = new ArrayList<>
-    (Arrays.asList(new Product("abols", "garsigs", 10, 0.99f),
-                    new Product("bumbieris", "zals", 2, 0.12f), 
-                    new Product("arbuzs", "salds", 3, 1.99f)));
+	@Autowired
+	private ProductCRUD productCRUDService;
 
 	@GetMapping("/home")// url - localhost:8080/home
 	public String getHomePage()
@@ -50,7 +50,7 @@ public class MyFirstController {
 	public String getAllProducts(Model model)
 	{
 		
-		model.addAttribute("object", allProducts);
+		model.addAttribute("object", productCRUDService.readAllProducts());
 		return "all-product-page";//shows all-product-page html
 		
 		
@@ -68,30 +68,26 @@ public class MyFirstController {
 	@GetMapping("/allProductsFilter") //url localhost:8080/allProductsFilter
 	public String getAllProductsFilter(@RequestParam(name="id") int id , Model model) 
 	{
-		for(Product temp: allProducts)
-		{
-			if(temp.getId()==id)
-			{
-				model.addAttribute("object", temp);
+		try {
+				model.addAttribute("object", productCRUDService.readProductById(id));
 				return "one-product-page";
-			}
 		}
+		catch(Exception e) {		
 		return"error-page";
+		}
 	}
 	
 	//localhost:8080/products/1/12/123 -> parada tikai 1 produktu @PathVariable
 	@GetMapping("/allProducts/{id}")
 	public String getAllProductsById(@PathVariable(name="id")int id, Model model)
 	{
-		for(Product temp: allProducts)
-		{
-			if(temp.getId()==id)
-			{
-				model.addAttribute("object", temp);
-				return "one-product-page";
-			}
+		try {
+			model.addAttribute("object", productCRUDService.readProductById(id));
+			return "one-product-page";
 		}
-		return"error-page";
+		catch(Exception e) {		
+			return"error-page";
+		}
 		
 	}
 
@@ -108,10 +104,12 @@ public class MyFirstController {
 	@PostMapping("/addProduct")
 	public String postAddProduct(Product product) //new Product() - aizpildīts
 	{
-		Product newProduct = new Product(product.getTitle(),
-				product.getDescription(),product.getQuantity(),product.getPrice());
-		allProducts.add(newProduct);
-		return "redirect:/allProducts"; //post norada uz kuru adresi pārlekt
+		
+		if(productCRUDService.createNewProduct(product))
+			return "redirect:/allProducts"; //post norada uz kuru adresi pārlekt
+		else 
+			return "redirect:/error";
+		
 	}
 	
 	//3.1   redirect uz /allProduct url
@@ -120,33 +118,23 @@ public class MyFirstController {
 	@GetMapping("/updateProduct/{id}") //localhost:8080/updateProduct/2
 	public String getUpdateProduct(@PathVariable(name="id") int id, Model model)
 	{
-		for(Product temp: allProducts)
-		{
-			if(temp.getId()==id)
-			{
-				model.addAttribute("product", temp);
-				return "update-product-page";
-			}
+		try {
+			model.addAttribute("product", productCRUDService.readProductById(id));
+			return "update-product-page";
 		}
-		return"error-page";
+		catch(Exception e) {		
+			return"error-page";
+		}
 		
 	}
 	
 	@PostMapping("/updateProduct/{id}") 
 	public String postUpdateProduct(@PathVariable(name="id") int id, Product product)
 	{
-		for(Product temp: allProducts)
-		{
-			if(temp.getId()==id)
-			{
-				temp.setTitle(product.getTitle());
-				temp.setDescription(product.getTitle());
-				temp.setPrice(product.getPrice());
-				temp.setQuantity(product.getQuantity());
+		if(productCRUDService.updateProductById(id, product))
 				return "redirect:/allProducts/"+id; //calls localhost page by id
-			}
-		}
-		return"redirect:/error"; //localhost:8080/error
+		else
+			return"redirect:/error"; //localhost:8080/error
 	}
 
 	@GetMapping ("/error")
@@ -161,19 +149,13 @@ public class MyFirstController {
 	public String getDeleteProduct(@PathVariable(name="id") int id,Model model)
 	//3. find product by id
 	{
-		for(Product temp: allProducts)
+		if(productCRUDService.deleteProductById(id))
 		{
-			if(temp.getId()==id)
-			{
-				//4. delete product
-				allProducts.remove(temp);
-				//5. pass product list to frontend
-				model.addAttribute("object", allProducts);
-				//6. show all-product-page.html
+				model.addAttribute("object", productCRUDService.readAllProducts());
 				return"all-product-page";
-			}
 		}
-		return"error-page";
+		else
+			return"error-page";
 	
 	}
 }
