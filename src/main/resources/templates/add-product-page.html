@@ -10,26 +10,26 @@
 			<tr>
 			
 				<td><label>TITLE:</label></td>
-				<td><input type="text" th:field="*{title}"></td> <!-- tiek saglabāts teksts product.title -->
+				<td><input type="text" th:field="*{title}"/></td> <!-- tiek saglabāts teksts product.title -->
 				<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"/>	
 			</tr>
 			
 			<tr>
 				<td><label>DESCRIPTION:</label></td>
-				<td><input type="text" th:field="*{description}"></td>
+				<td><input type="text" th:field="*{description}"/></td>
 				<td th:if="${#fields.hasErrors('description')}" th:errors="*{description}"/>	
 			</tr>
 			
 						
 			<tr>
 				<td><label>PRICE:</label></td>
-				<td><input type="text" th:field="*{price}"></td>
+				<td><input type="text" th:field="*{price}"/></td>
 				<td th:if="${#fields.hasErrors('price')}" th:errors="*{price}"/>	
 			</tr> 
 			
 			<tr>
 				<td><label>QUANTITY:</label></td>
-				<td><input type="text" th:field="*{quantity}"></td>
+				<td><input type="text" th:field="*{quantity}"/></td>
 				<td th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"/>	
 			</tr>
 

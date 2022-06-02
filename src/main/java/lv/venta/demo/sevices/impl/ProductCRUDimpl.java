@@ -65,7 +65,7 @@ public class ProductCRUDimpl implements ProductCRUD{
 			if(temp.getId()==id)
 			{
 				temp.setTitle(product.getTitle());
-				temp.setDescription(product.getTitle());
+				temp.setDescription(product.getDescription());
 				temp.setPrice(product.getPrice());
 				temp.setQuantity(product.getQuantity());
 				return true;

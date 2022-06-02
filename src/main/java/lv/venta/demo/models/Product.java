@@ -14,7 +14,7 @@ public class Product {
 	@Pattern(regexp="[A-Z]{1}[a-z]+")
 	private String title;
 	
-	@Size(min=5, max=20)
+	@Size(min=4, max=20)
 	@Pattern(regexp="[A-Z]{1}[a-z\\s]+")
 	private String description;
 	

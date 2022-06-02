@@ -1,7 +1,5 @@
 package lv.venta.demo.controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.validation.Valid;
 
@@ -126,6 +124,7 @@ public class MyFirstController {
 	@GetMapping("/updateProduct/{id}") //localhost:8080/updateProduct/2
 	public String getUpdateProduct(@PathVariable(name="id") int id, Model model)
 	{
+		
 		try {
 			model.addAttribute("product", productCRUDService.readProductById(id));
 			return "update-product-page";
@@ -137,12 +136,20 @@ public class MyFirstController {
 	}
 	
 	@PostMapping("/updateProduct/{id}") 
-	public String postUpdateProduct(@PathVariable(name="id") int id, Product product)
+	public String postUpdateProduct(@PathVariable(name="id") int id,Product product, BindingResult result)
 	{
-		if(productCRUDService.updateProductById(id, product))
-				return "redirect:/allProducts/"+id; //calls localhost page by id
+		if(!result.hasErrors())
+		{
+			if(productCRUDService.updateProductById(id, product))
+					return "redirect:/allProducts/"+id; //calls localhost page by id
+			else
+				return"redirect:/error"; //localhost:8080/error
+		}
 		else
-			return"redirect:/error"; //localhost:8080/error
+		{
+			return "update-product-page";
+		}	
+			
 	}
 
 	@GetMapping ("/error")
