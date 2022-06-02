@@ -107,12 +107,17 @@ public class MyFirstController {
 	@PostMapping("/addProduct")
 	public String postAddProduct(@Valid Product product, BindingResult result) //new Product() - aizpildīts
 	{
-		
-		if(productCRUDService.createNewProduct(product))
-			return "redirect:/allProducts"; //post norada uz kuru adresi pārlekt
-		else 
-			return "redirect:/error";
-		
+		if(!result.hasErrors())
+		{
+			if(productCRUDService.createNewProduct(product))
+				return "redirect:/allProducts"; //post norada uz kuru adresi pārlekt
+			else 
+				return "redirect:/error";
+		}
+		else
+		{
+			return "add-product-page";
+		}
 	}
 	
 	//3.1   redirect uz /allProduct url
